@@ -37,14 +37,14 @@ class LinkedList {
   }
 
   getHead() {
-    return this.head.value;
+    return this.head;
   }
 
   getTail() {
     let currNode = this.head;
     while (currNode !== null) {
       if (currNode.nextNode === null) {
-        return currNode.value;
+        return currNode;
       }
       currNode = currNode.nextNode;
     }
@@ -52,12 +52,12 @@ class LinkedList {
 
   at(index) {
     let currNode = this.head;
-    let i = 0;
+    let i = 1;
     while (index !== i) {
       i++;
       currNode = currNode.nextNode;
     }
-    return currNode.value;
+    return currNode;
   }
 
   pop() {
@@ -88,25 +88,6 @@ class LinkedList {
     return null;
   }
 
-  insertAt(value, index) {
-    let newNode = new Node(value);
-    let currNode = this.head;
-    let i = 1;
-    while (currNode !== null) {
-      if (i++ === index) {
-        if (currNode === this.head) {
-          this.prepend(newNode);
-        } else {
-          const temp = currNode.nextNode;
-          currNode.nextNode = newNode;
-          newNode.nextNode = temp;
-        }
-      }
-      i++;
-      currNode = currNode.nextNode;
-    }
-  }
-
   toString() {
     let listString = "";
     let currNode = this.head;
@@ -119,6 +100,54 @@ class LinkedList {
       currNode = currNode.nextNode;
     }
     console.log(listString);
+  }
+
+  insertAt(value, index) {
+    let newNode = new Node(value);
+
+    if (this.head === null) {
+      this.head = newNode;
+      return;
+    }
+
+    if (value === 0) {
+      this.prepend(newNode);
+      return;
+    }
+
+    if (index >= this.size()) {
+      this.append(newNode);
+      return;
+    }
+
+    const parent = this.at(index - 1);
+    const child = parent.nextNode;
+    parent.nextNode = newNode;
+    newNode.nextNode = child;
+  }
+
+  removeAt(index) {
+    if (this.head === null) {
+      return;
+    }
+
+    if (index === 0) {
+      const tempHead = this.head;
+      const newHead = this.head.nextNode;
+      tempHead.nextNode = null;
+      this.head = newHead;
+      return;
+    }
+
+    if (index >= this.size()) {
+      this.at(this.size() - 1).nextNode = null;
+      return;
+    }
+
+    const parent = this.at(index - 1);
+    const child = this.at(index).nextNode;
+    parent.nextNode = child;
+    this.at(index).nextNode = null;
   }
 }
 
@@ -150,5 +179,10 @@ const main = (() => {
   console.log(myLinkedList.find(5));
 
   myLinkedList.insertAt(7, 2);
+  myLinkedList.toString();
+
+  myLinkedList.removeAt(4);
+  myLinkedList.toString();
+  myLinkedList.removeAt(2);
   myLinkedList.toString();
 })();
