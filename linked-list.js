@@ -93,7 +93,7 @@ class LinkedList {
     let currNode = this.head;
     let i = 1;
     while (currNode !== null) {
-      if (i === index) {
+      if (i++ === index) {
         if (currNode === this.head) {
           this.prepend(newNode);
         } else {
